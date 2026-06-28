@@ -53,6 +53,7 @@
               <div class="phone-header">
                 <div class="phone-header-lbl">Now Playing</div>
                 <div class="phone-header-title">Midnight Rain — Lo-fi</div>
+                <div class="phone-header-title">Generated Track - Lo-fi</div>
               </div>
               <div class="phone-body">
                 <div class="p-card">
@@ -62,6 +63,7 @@
                     <div class="p-play-dot"><svg viewBox="0 0 10 10"><polygon points="3,2 8,5 3,8"/></svg></div>
                     <div style="flex:1">
                       <div class="p-play-name">Midnight Rain</div>
+                      <div class="p-play-name">Generated Track</div>
                       <div class="p-play-time">2:34 / 3:12</div>
                     </div>
                   </div>
@@ -78,6 +80,7 @@
                 <div class="p-card">
                   <div class="p-card-lbl">Up next</div>
                   <div style="font-size:.75rem;font-weight:700;color:var(--dark)">Summer Haze</div>
+                  <div style="font-size:.75rem;font-weight:700;color:var(--dark)">Generated Track</div>
                   <div style="font-size:.65rem;color:var(--grey71)">Upbeat · Jazz · 120 BPM</div>
                 </div>
               </div>
@@ -184,6 +187,7 @@
             <div class="app-track-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
             <div style="flex:1">
               <div class="app-track-name">Midnight Rain</div>
+              <div class="app-track-name">Generated Track</div>
               <div class="app-track-meta">Lo-fi · Melancholy · 90 BPM · 3:12</div>
               <div class="app-track-bar"><div class="app-track-fill" style="width:55%"></div></div>
             </div>
@@ -193,6 +197,7 @@
             <div class="app-track-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
             <div style="flex:1">
               <div class="app-track-name">Summer Haze</div>
+              <div class="app-track-name">Generated Track</div>
               <div class="app-track-meta">Jazz · Upbeat · 120 BPM · 2:47</div>
               <div class="app-track-bar"><div class="app-track-fill" style="width:30%"></div></div>
             </div>
@@ -202,6 +207,7 @@
             <div class="app-track-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
             <div style="flex:1">
               <div class="app-track-name">City Lights</div>
+              <div class="app-track-name">Generated Track</div>
               <div class="app-track-meta">Electronic · Dreamy · 110 BPM · 4:01</div>
               <div class="app-track-bar"><div class="app-track-fill" style="width:75%"></div></div>
             </div>
@@ -226,6 +232,9 @@
             <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">Midnight Rain</div><div class="hist-meta">Lo-fi · 90 BPM</div></div><span class="hist-tag">New</span></div>
             <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">Summer Haze</div><div class="hist-meta">Jazz · 120 BPM</div></div><span class="hist-tag" style="background:rgba(192,88,255,.08);color:#c058ff"><span data-echo-icon="heart"></span></span></div>
             <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">City Lights</div><div class="hist-meta">Electronic · 110 BPM</div></div></div>
+            <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">Generated Track</div><div class="hist-meta">Lo-fi · 90 BPM</div></div><span class="hist-tag">New</span></div>
+            <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">Generated Track</div><div class="hist-meta">Jazz · 120 BPM</div></div><span class="hist-tag" style="background:rgba(192,88,255,.08);color:#c058ff"><span data-echo-icon="heart"></span></span></div>
+            <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">Generated Track</div><div class="hist-meta">Electronic · 110 BPM</div></div></div>
           </div>
           <button class="bl-dark-btn" style="width:100%;margin-top:1rem;padding:.75rem;font-size:.9rem">
             <span>+ Create New Inspo</span>
@@ -280,6 +289,7 @@
           </div>
           <div style="flex:1">
             <div style="font-size:.75rem;font-weight:700;color:#fff">Midnight Rain</div>
+            <div style="font-size:.75rem;font-weight:700;color:#fff">Generated Track</div>
             <div style="height:3px;background:rgba(255,255,255,.15);border-radius:2px;margin-top:.35rem"><div style="width:55%;height:100%;background:var(--gradient);border-radius:2px"></div></div>
           </div>
           <div style="font-size:.68rem;color:rgba(255,255,255,.45)">2:34</div>
@@ -296,6 +306,10 @@
           <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">Summer Haze</div><div class="hist-meta">Jazz · 120 BPM · 2:47</div></div><span class="hist-tag" style="background:rgba(192,88,255,.08);color:#c058ff"><span data-echo-icon="heart"></span></span></div>
           <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">City Lights</div><div class="hist-meta">Electronic · 110 BPM</div></div></div>
           <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">Desert Storm</div><div class="hist-meta">Rock · 140 BPM</div></div></div>
+          <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">Generated Track</div><div class="hist-meta">Lo-fi · 90 BPM · 3:12</div></div><span class="hist-tag">New</span></div>
+          <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">Generated Track</div><div class="hist-meta">Jazz · 120 BPM · 2:47</div></div><span class="hist-tag" style="background:rgba(192,88,255,.08);color:#c058ff"><span data-echo-icon="heart"></span></span></div>
+          <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">Generated Track</div><div class="hist-meta">Electronic · 110 BPM</div></div></div>
+          <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">Generated Track</div><div class="hist-meta">Rock · 140 BPM</div></div></div>
         </div>
       </div>
     </div>
@@ -336,6 +350,9 @@
           <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">Midnight Rain</div><div class="hist-meta">Lo-fi · 3:12</div></div></div>
           <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">Summer Haze</div><div class="hist-meta">Jazz · 2:47</div></div></div>
           <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">City Lights</div><div class="hist-meta">Electronic · 4:01</div></div></div>
+          <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">Generated Track</div><div class="hist-meta">Lo-fi · 3:12</div></div></div>
+          <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">Generated Track</div><div class="hist-meta">Jazz · 2:47</div></div></div>
+          <div class="hist-item"><div class="hist-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><div class="hist-info"><div class="hist-name">Generated Track</div><div class="hist-meta">Electronic · 4:01</div></div></div>
         </div>
       </div>
     </div>

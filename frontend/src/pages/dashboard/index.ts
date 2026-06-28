@@ -210,6 +210,7 @@ function togglePlay(id, e){
 
   if(wasPlaying){
     playingId = null;
+    if(audioPlayer) audioPlayer.pause();
     showToast('Paused');
   } else {
     playingId = id;
@@ -218,6 +219,12 @@ function togglePlay(id, e){
     const icon = document.getElementById('play-icon-'+id);
     if(icon) icon.innerHTML = '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>';
     const t = tracks.find(t=>t.id===id);
+    if(t?.audioUrl){
+      if(audioPlayer) audioPlayer.pause();
+      audioPlayer = new Audio(t.audioUrl);
+      audioPlayer.addEventListener('ended', () => togglePlay(id, { stopPropagation(){} }));
+      audioPlayer.play().catch(() => showToast('Audio playback failed'));
+    }
     if(t) showToast('Playing: '+t.name);
   }
 }
@@ -240,6 +247,13 @@ function downloadTrack(id, fmt='mp3'){
   closeAllMenus();
   const t = tracks.find(t=>t.id===id);
   if(t) showToast('Downloading '+t.name+'.'+fmt+'…');
+  if(!t) return;
+  if(t.downloadUrl || t.audioUrl){
+    window.open(t.downloadUrl || t.audioUrl, '_blank');
+    showToast('Downloading '+t.name+'.'+fmt);
+  } else {
+    showToast('No download is available yet');
+  }
 }
 
 function toggleFav(id){
@@ -266,7 +280,7 @@ function deleteTrack(id){
   const card = document.getElementById('card-'+id);
   if(card){ card.style.opacity='.4'; card.style.transform='scale(.97)'; card.style.transition='all .2s'; }
   setTimeout(()=>{
-    tracks = tracks.filter(t=>t.id!==id);
+  tracks = tracks.filter(t=>t.id!==id);
     saveTracks();
     renderView();
     showToast('Track deleted');
@@ -305,6 +319,16 @@ function handleLogout(){
    CREATE INSPO POPUP — Phase 4
 ═══════════════════════════════════════════════ */
 const STEPS = [
+  {
+    id:'generation-mode', label:'Mode',
+    title:'Choose generation mode',
+    sub:'Use the cloud API for faster songs, or the local model running in this backend.',
+    type:'mode', key:'generationMode',
+    options:[
+      {value:'api', title:'API', meta:'Cloud generation', detail:'Usually faster and returns MP3 audio.'},
+      {value:'musicgen', title:'Model', meta:'Local MusicGen', detail:'Runs through the loaded backend model.'},
+    ]
+  },
   {
     id:'mood', label:'Mood',
     title:'How do you want to feel?',
@@ -444,6 +468,19 @@ function buildStepHTML(step){
     });
     html += `</div>`;
 
+  } else if(step.type === 'mode'){
+    const current = sel.generationMode || 'api';
+    html += `<div class="mode-choice-grid">`;
+    step.options.forEach(o => {
+      const active = current === o.value;
+      html += `<button type="button" class="mode-choice${active?' sel':''}" data-key="${step.key}" data-val="${o.value}" onclick="selectMode(this)">
+        <span class="mode-choice-title">${o.title}</span>
+        <span class="mode-choice-meta">${o.meta}</span>
+        <span class="mode-choice-detail">${o.detail}</span>
+      </button>`;
+    });
+    html += `</div>`;
+
   } else if(step.type === 'bpm'){
     const v = sel.bpm || 90;
     html += `<div class="bpm-display">
@@ -507,6 +544,14 @@ function selectChip(el){
   const val = el.dataset.val;
   sel[key] = val;
   el.closest('.choice-grid').querySelectorAll('.choice-chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function selectMode(el){
+  const key = el.dataset.key;
+  const val = el.dataset.val;
+  sel[key] = val;
+  el.closest('.mode-choice-grid').querySelectorAll('.mode-choice').forEach(c => c.classList.remove('sel'));
   el.classList.add('sel');
 }
 
@@ -581,6 +626,7 @@ function prevStep(){
 function submitInspo(){
   // Persist inspo data for generate page
   const inspo = {
+    generationMode: sel.generationMode || 'api',
     mood:       sel.mood       || 'Custom',
     genre:      sel.genre      || 'Mixed',
     theme:      sel.theme      || '',
@@ -632,6 +678,7 @@ Object.assign(window, {
   buildStepHTML,
   renderPopupStep,
   selectChip,
+  selectMode,
   onBPMInput,
   setBPMPreset,
   updateSliderFill,

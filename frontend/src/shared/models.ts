@@ -1,4 +1,6 @@
 ﻿export interface Inspiration {
+export interface Inspiration {
+  generationMode: "api" | "musicgen";
   mood: string;
   genre: string;
   theme: string;
@@ -20,6 +22,12 @@ export interface Track {
   color: string;
   emoji?: string;
   fav: boolean;
+  audioUrl?: string;
+  downloadUrl?: string;
+  lyricsPdfUrl?: string;
+  musicSheetPdfUrl?: string;
+  chordSheetPdfUrl?: string;
+  backendSong?: unknown;
 }
 
 export interface AuthUser {

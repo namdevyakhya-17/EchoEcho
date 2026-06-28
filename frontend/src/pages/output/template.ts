@@ -29,6 +29,7 @@
       <div class="success-badge">✦ Generated</div>
       <h1 class="page-headline">Your tracks are ready</h1>
       <p class="page-sub">4 unique variations based on your inspo</p>
+      <p class="page-sub">Generated from your inspo</p>
       <div class="inspo-pills" id="inspo-pills">
         <!-- populated by JS -->
       </div>
@@ -43,17 +44,20 @@
                style="background: linear-gradient(135deg, rgba(255,88,88,.13), rgba(255,88,88,.28))">
             <div class="waveform" id="wave-0"></div>
             <div class="cover-dur" id="dur-0">3:12</div>
+            <div class="cover-dur" id="dur-0">0:00</div>
             <div class="best-badge">Best Match ✦</div>
           </div>
 
           <div class="card-body">
             <div class="card-name">Midnight Rain v1</div>
+            <div class="card-name">Generated track</div>
             <div class="card-tags" id="tags-0"></div>
             <div class="card-dur-badge">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
               </svg>
               <span id="dur-label-0">3:12</span>
+              <span id="dur-label-0">0:00</span>
             </div>
           </div>
 
@@ -70,6 +74,7 @@
                      style="background: var(--greyF4)"/>
             </div>
             <div class="time-display" id="time-0">0:00 / 3:12</div>
+            <div class="time-display" id="time-0">0:00 / 0:00</div>
           </div>
 
           <div class="action-row">
@@ -95,6 +100,35 @@
               </svg>
             </button>
           </div>
+          <div class="sheet-download-row">
+            <button class="sheet-dl-btn" id="lyrics-pdf-0" onclick="downloadSheetPdf(0,'lyrics')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="8" y1="13" x2="16" y2="13"/>
+                <line x1="8" y1="17" x2="14" y2="17"/>
+              </svg>
+              Lyrics PDF
+            </button>
+            <button class="sheet-dl-btn" id="music-pdf-0" onclick="downloadSheetPdf(0,'music')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <path d="M9 18V11l6-1v7"/>
+                <circle cx="8" cy="18" r="1"/>
+                <circle cx="14" cy="17" r="1"/>
+              </svg>
+              Music PDF
+            </button>
+            <button class="sheet-dl-btn" id="chord-pdf-0" onclick="downloadSheetPdf(0,'chord')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <path d="M8 13h8M8 17h8M8 9h3"/>
+              </svg>
+              Chord PDF
+            </button>
+          </div>
         </div>
       </div>
 
@@ -108,12 +142,18 @@
 
         <div class="card-body">
           <div class="card-name">Midnight Rain v2</div>
+          <div class="cover-dur" id="dur-1">0:00</div>
+        </div>
+
+        <div class="card-body">
+          <div class="card-name">Generated track</div>
           <div class="card-tags" id="tags-1"></div>
           <div class="card-dur-badge">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
             </svg>
             <span id="dur-label-1">2:47</span>
+            <span id="dur-label-1">0:00</span>
           </div>
         </div>
 
@@ -130,6 +170,7 @@
                    style="background: var(--greyF4)"/>
           </div>
           <div class="time-display" id="time-1">0:00 / 2:47</div>
+          <div class="time-display" id="time-1">0:00 / 0:00</div>
         </div>
 
         <div class="action-row">
@@ -167,12 +208,18 @@
 
         <div class="card-body">
           <div class="card-name">Midnight Rain v3</div>
+          <div class="cover-dur" id="dur-2">0:00</div>
+        </div>
+
+        <div class="card-body">
+          <div class="card-name">Generated track</div>
           <div class="card-tags" id="tags-2"></div>
           <div class="card-dur-badge">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
             </svg>
             <span id="dur-label-2">4:01</span>
+            <span id="dur-label-2">0:00</span>
           </div>
         </div>
 
@@ -189,6 +236,7 @@
                    style="background: var(--greyF4)"/>
           </div>
           <div class="time-display" id="time-2">0:00 / 4:01</div>
+          <div class="time-display" id="time-2">0:00 / 0:00</div>
         </div>
 
         <div class="action-row">
@@ -226,12 +274,18 @@
 
         <div class="card-body">
           <div class="card-name">Midnight Rain v4</div>
+          <div class="cover-dur" id="dur-3">0:00</div>
+        </div>
+
+        <div class="card-body">
+          <div class="card-name">Generated track</div>
           <div class="card-tags" id="tags-3"></div>
           <div class="card-dur-badge">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
             </svg>
             <span id="dur-label-3">2:33</span>
+            <span id="dur-label-3">0:00</span>
           </div>
         </div>
 
@@ -248,6 +302,7 @@
                    style="background: var(--greyF4)"/>
           </div>
           <div class="time-display" id="time-3">0:00 / 2:33</div>
+          <div class="time-display" id="time-3">0:00 / 0:00</div>
         </div>
 
         <div class="action-row">

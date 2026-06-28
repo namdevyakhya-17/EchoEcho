@@ -1,6 +1,7 @@
 ﻿// @ts-nocheck
 import "./styles.css";
 import { startIconObserver } from "../../shared/icons";
+import { fetchSongs, formatDuration, songToTrack } from "../../shared/api";
 
 startIconObserver();
 
@@ -17,11 +18,23 @@ const playState = [false, false, false, false];
 let playIntervals = [null, null, null, null];
 let heartState = [false, false, false, false];
 let selectedCard = 0; // default: Best Match
+const CARD_VARIANTS = ['Generated'];
+
+/* Playing state per card */
+const playState = [false];
+let playIntervals = [null];
+let heartState = [false];
+let selectedCard = 0; // default: Best Match
+let outputTracks = [];
+let audioPlayer = null;
+const durSeconds = [180];
+const fakeProgress = [0];
 
 /* ═══════════════════════════════════════════════
    AUTH GUARD
 ═══════════════════════════════════════════════ */
 (function init() {
+(async function init() {
   if (!localStorage.getItem('echo_auth_token')) {
     window.location.href = '/login';
     return;
@@ -29,6 +42,14 @@ let selectedCard = 0; // default: Best Match
   const inspo = JSON.parse(localStorage.getItem('echo_pending_inspo') || '{}');
   buildInspoPills(inspo);
   buildAllTags(inspo);
+  const generatedSong = JSON.parse(localStorage.getItem('echo_generated_song') || 'null');
+  let songs = generatedSong ? [generatedSong] : [];
+  if (songs.length === 0) {
+    songs = await fetchSongs().catch(() => []);
+  }
+  outputTracks = songs.slice(0, 1).map(songToTrack);
+  buildInspoPills(inspo);
+  renderGeneratedCards(inspo);
   buildAllWaveforms();
 })();
 
@@ -66,9 +87,44 @@ function buildAllTags(inspo) {
       <span class="c-tag mood">${mood}</span>
       <span class="c-tag genre">${genre}</span>
       <span class="c-tag">${bpm} BPM</span>
+  for (let i = 0; i < outputTracks.length; i++) {
+    const container = document.getElementById('tags-' + i);
+    if (!container) continue;
+    const track = outputTracks[i];
+    const accentBg = CARD_ACCENTS[i] + '22';
+    container.innerHTML = `
+      <span class="c-tag mood">${track.mood || mood}</span>
+      <span class="c-tag genre">${track.genre || genre}</span>
+      <span class="c-tag">${track.bpm || bpm} BPM</span>
       <span class="c-tag" style="background:${accentBg};color:${CARD_ACCENTS[i]}">${subtitles[i]}</span>
     `;
   }
+}
+
+function renderGeneratedCards(inspo) {
+  const track = outputTracks[0];
+  document.querySelector('.page-sub').textContent = track
+    ? 'Generated from your inspo'
+    : 'No generated song was found';
+
+  for (let i = 1; i < 4; i++) {
+    const card = document.getElementById('card-' + i);
+    if (card) card.style.display = 'none';
+  }
+
+  if (!track) return;
+
+  const cardName = document.querySelector('#card-0 .card-name');
+  if (cardName) cardName.textContent = track.name;
+
+  const seconds = durationToSeconds(track.dur);
+  document.getElementById('dur-0').textContent = track.dur;
+  document.getElementById('dur-label-0').textContent = track.dur;
+  document.getElementById('time-0').textContent = `0:00 / ${track.dur}`;
+  durSeconds[0] = seconds;
+
+  buildAllTags(inspo);
+  updateSheetButtons(0);
 }
 
 /* ═══════════════════════════════════════════════
@@ -111,6 +167,7 @@ function buildWaveform(containerId, accent, barCount) {
 
 function buildAllWaveforms() {
   for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < Math.max(outputTracks.length, 1); i++) {
     buildWaveform('wave-' + i, CARD_ACCENTS[i], 50);
   }
 }
@@ -126,6 +183,7 @@ function togglePlay(idx) {
 
   // Stop all others
   for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < playState.length; i++) {
     if (playState[i]) stopCard(i);
   }
 
@@ -164,6 +222,13 @@ function startCard(idx) {
 
   /* Tick fake progress */
   clearInterval(playIntervals[idx]);
+  const track = outputTracks[idx];
+  if (track?.audioUrl) {
+    if (audioPlayer) audioPlayer.pause();
+    audioPlayer = new Audio(track.audioUrl);
+    audioPlayer.addEventListener('ended', () => stopCard(idx));
+    audioPlayer.play().catch(() => showToast('Audio playback failed'));
+  }
   playIntervals[idx] = setInterval(() => {
     fakeProgress[idx] = Math.min(fakeProgress[idx] + (100 / durSeconds[idx]), 100);
     updateProgressUI(idx);
@@ -171,12 +236,14 @@ function startCard(idx) {
   }, 1000);
 
   showToast('Playing: ' + CARD_NAMES[idx]);
+  showToast('Playing: ' + (track?.name || 'Generated track'));
 }
 
 function stopCard(idx) {
   playState[idx] = false;
   clearInterval(playIntervals[idx]);
   playIntervals[idx] = null;
+  if (audioPlayer) audioPlayer.pause();
 
   /* Restore play icon */
   document.getElementById('play-icon-' + idx).innerHTML =
@@ -195,6 +262,7 @@ function updateProgressUI(idx) {
   const elapsed = Math.round((pct / 100) * durSeconds[idx]);
   document.getElementById('time-' + idx).textContent =
     formatTime(elapsed) + ' / ' + CARD_DURATIONS[idx];
+    formatTime(elapsed) + ' / ' + formatDuration(durSeconds[idx]);
 }
 
 function onRangeInput(idx, input) {
@@ -204,6 +272,7 @@ function onRangeInput(idx, input) {
   const elapsed = Math.round((pct / 100) * durSeconds[idx]);
   document.getElementById('time-' + idx).textContent =
     formatTime(elapsed) + ' / ' + CARD_DURATIONS[idx];
+    formatTime(elapsed) + ' / ' + formatDuration(durSeconds[idx]);
 }
 
 function updateRangeTrack(idx, pct, accent) {
@@ -243,6 +312,54 @@ function toggleHeart(idx) {
 ═══════════════════════════════════════════════ */
 function downloadTrack(idx, fmt) {
   showToast('Downloading ' + CARD_NAMES[idx] + '.' + fmt + '…');
+  const track = outputTracks[idx];
+  if (track?.downloadUrl || track?.audioUrl) {
+    window.open(track.downloadUrl || track.audioUrl, '_blank');
+    showToast('Downloading ' + track.name + '.' + fmt);
+  } else {
+    showToast('No download is available yet');
+  }
+}
+
+function downloadSheetPdf(idx, type) {
+  const track = outputTracks[idx];
+  const url = sheetPdfUrl(track, type);
+  if (!url) {
+    showToast(sheetLabel(type) + ' PDF is not available yet');
+    return;
+  }
+  window.open(url, '_blank');
+  showToast('Downloading ' + sheetLabel(type) + ' PDF');
+}
+
+function sheetPdfUrl(track, type) {
+  if (!track) return null;
+  if (type === 'lyrics') return track.lyricsPdfUrl;
+  if (type === 'music') return track.musicSheetPdfUrl;
+  if (type === 'chord') return track.chordSheetPdfUrl;
+  return null;
+}
+
+function sheetLabel(type) {
+  if (type === 'lyrics') return 'Lyrics';
+  if (type === 'music') return 'Music sheet';
+  if (type === 'chord') return 'Chord sheet';
+  return 'Sheet';
+}
+
+function updateSheetButtons(idx) {
+  const track = outputTracks[idx];
+  [
+    ['lyrics-pdf-' + idx, 'lyrics'],
+    ['music-pdf-' + idx, 'music'],
+    ['chord-pdf-' + idx, 'chord'],
+  ].forEach(([id, type]) => {
+    const button = document.getElementById(id);
+    if (!button) return;
+    const unavailable = !sheetPdfUrl(track, type);
+    button.classList.toggle('disabled', unavailable);
+    button.title = unavailable ? sheetLabel(type) + ' PDF is not available yet' : 'Download ' + sheetLabel(type) + ' PDF';
+  });
 }
 
 /* ═══════════════════════════════════════════════
@@ -265,6 +382,8 @@ function saveToLibrary(cardIdx) {
   };
   tracks.unshift(newTrack);
   localStorage.setItem('echo_tracks', JSON.stringify(tracks));
+  const track = outputTracks[cardIdx];
+  if (track) localStorage.setItem('echo_tracks', JSON.stringify(outputTracks));
   window.location.href = '/dashboard';
 }
 
@@ -304,6 +423,16 @@ function showToast(msg) {
   });
 })();
 
+      showToast((outputTracks[idx]?.name || 'Generated track') + ' selected');
+    });
+  });
+})();
+
+function durationToSeconds(value) {
+  const [minutes, seconds] = String(value || '3:00').split(':').map(Number);
+  return (minutes || 0) * 60 + (seconds || 0);
+}
+
 
 Object.assign(window, {
   buildInspoPills,
@@ -319,6 +448,7 @@ Object.assign(window, {
   formatTime,
   toggleHeart,
   downloadTrack,
+  downloadSheetPdf,
   saveToLibrary,
   generateMore,
   showToast,

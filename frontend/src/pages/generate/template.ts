@@ -76,6 +76,7 @@
         <div class="status-headline" id="status-headline">Tuning your melody...</div>
       </div>
       <p class="status-sub">Your track will be ready in about 30 seconds</p>
+      <p class="status-sub">Your track will be ready soon...</p>
       <div class="status-timer" id="status-timer">0:00</div>
     </div>
 

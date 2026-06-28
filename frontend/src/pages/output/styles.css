@@ -308,6 +308,41 @@
     .dl-btn:hover { background: var(--greyF4); border-color: rgba(13,13,13,.18); }
     .dl-btn:active { transform: scale(.97); }
 
+    .sheet-download-row {
+      padding: 0 1.125rem .875rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .45rem;
+    }
+    .sheet-dl-btn {
+      min-width: 0;
+      border: 1.5px solid rgba(13,13,13,.08);
+      background: var(--greyF4);
+      border-radius: 9999px;
+      padding: .42rem .5rem;
+      font-size: .68rem;
+      font-weight: 650;
+      color: var(--dark);
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .3rem;
+      white-space: nowrap;
+      transition: background .15s, border-color .15s, opacity .15s;
+    }
+    .sheet-dl-btn:hover { background: #fff; border-color: rgba(13,13,13,.18); }
+    .sheet-dl-btn:active { transform: scale(.97); }
+    .sheet-dl-btn.disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+    .sheet-dl-btn.disabled:hover {
+      background: var(--greyF4);
+      border-color: rgba(13,13,13,.08);
+    }
+
     .heart-btn {
       width: 36px; height: 36px; border-radius: 50%;
       border: 1.5px solid rgba(13,13,13,.1);
@@ -406,5 +441,8 @@
     @media (max-width: 480px) {
       .waveform { gap: 2px; }
       .wv-bar { width: 3px; }
+    }
+  
+      .sheet-download-row { grid-template-columns: 1fr; }
     }
   

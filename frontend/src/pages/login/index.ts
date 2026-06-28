@@ -28,6 +28,14 @@ startIconObserver();
     {e:'<span data-echo-icon="moon"></span>',n:'Late Night',s:'Chill · 85 BPM',p:60},
     {e:'<span data-echo-icon="guitar"></span>',n:'Rebel Yell',s:'Punk · 155 BPM',p:35},
     {e:'<span data-echo-icon="flower"></span>',n:'Cherry Bloom',s:'Dream Pop · 95 BPM',p:90},
+    {e:'<span data-echo-icon="cloudRain"></span>',n:'Generated Track',s:'Lo-fi · 90 BPM',p:55},
+    {e:'<span data-echo-icon="sun"></span>',n:'Generated Track',s:'Jazz · 120 BPM',p:30},
+    {e:'<span data-echo-icon="waves"></span>',n:'Generated Track',s:'Ambient · 75 BPM',p:80},
+    {e:'<span data-echo-icon="flame"></span>',n:'Generated Track',s:'Rock · 140 BPM',p:45},
+    {e:'<span data-echo-icon="sparkles"></span>',n:'Generated Track',s:'Electronic · 110 BPM',p:70},
+    {e:'<span data-echo-icon="moon"></span>',n:'Generated Track',s:'Chill · 85 BPM',p:60},
+    {e:'<span data-echo-icon="guitar"></span>',n:'Generated Track',s:'Punk · 155 BPM',p:35},
+    {e:'<span data-echo-icon="flower"></span>',n:'Generated Track',s:'Dream Pop · 95 BPM',p:90},
   ];
   const ct=document.getElementById('left-cards');
   [...moods,...moods].forEach(m=>{

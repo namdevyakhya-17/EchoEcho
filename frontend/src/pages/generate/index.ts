@@ -1,6 +1,7 @@
 ﻿// @ts-nocheck
 import "./styles.css";
 import { startIconObserver } from "../../shared/icons";
+import { generateInspiration, responseToSong } from "../../shared/api";
 
 startIconObserver();
 
@@ -17,6 +18,7 @@ startIconObserver();
   /* ── Build inspo pills ──────────────────────────────── */
   const pillsRow = document.getElementById('pills-row');
   const pillDefs = [
+    { key: 'generationMode', label: 'Mode' },
     { key: 'mood',       label: 'Mood' },
     { key: 'genre',      label: 'Genre' },
     { key: 'theme',      label: 'Theme' },
@@ -168,6 +170,38 @@ startIconObserver();
     clearInterval(timerInterval);
     window.location.href = '/output';
   }, 30000);
+  const cleanup = () => {
+    clearInterval(headlineInterval);
+    clearInterval(timerInterval);
+    stepTimers.forEach(clearTimeout);
+  };
+
+  async function runGeneration() {
+    try {
+      const result = await generateInspiration(inspo);
+      const song = responseToSong(result);
+      if (!song) throw new Error('Generation completed without a song record.');
+
+      completeStep('step-1', Math.floor((Date.now() - startTime) / 1000));
+      completeStep('step-2', Math.floor((Date.now() - startTime) / 1000));
+      completeStep('step-3', Math.floor((Date.now() - startTime) / 1000));
+      completeStep('step-4', Math.floor((Date.now() - startTime) / 1000));
+      localStorage.setItem('echo_generated_song', JSON.stringify(song));
+      cleanup();
+      window.location.href = '/output';
+    } catch (error) {
+      cleanup();
+      hlEl.textContent = 'Generation failed';
+      const sub = document.querySelector('.status-sub');
+      if (sub) sub.textContent = error instanceof Error ? error.message : 'Please try again from the dashboard.';
+      document.querySelectorAll('.step.active').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.step-icon.spinning').forEach(el => {
+        el.className = 'step-icon pending';
+      });
+    }
+  }
+
+  void runGeneration();
 
   /* ── Skip links navigate immediately ───────────────── */
   document.querySelectorAll('a[href="/output"]').forEach(a => {
@@ -177,6 +211,7 @@ startIconObserver();
       clearInterval(headlineInterval);
       clearInterval(timerInterval);
       stepTimers.forEach(clearTimeout);
+      cleanup();
       window.location.href = '/output';
     });
   });
