@@ -1,19 +1,29 @@
 ﻿// @ts-nocheck
 import "./styles.css";
 import { startIconObserver } from "../../shared/icons";
-import { fetchSongs, songToTrack } from "../../shared/api";
 
 startIconObserver();
+
+/* ═══════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════ */
+const DEMO_TRACKS = [
+  {id:'t1',name:'Midnight Rain',  mood:'Melancholy',genre:'Lo-fi',       bpm:90, dur:'3:12',date:'2 days ago',   color:'#ff5858',emoji:'<span data-echo-icon="cloudRain"></span>',fav:false},
+  {id:'t2',name:'Summer Haze',    mood:'Upbeat',    genre:'Jazz',         bpm:120,dur:'2:47',date:'5 days ago',   color:'#f7b731',emoji:'<span data-echo-icon="sun"></span>',fav:true},
+  {id:'t3',name:'City Lights',    mood:'Dreamy',    genre:'Electronic',   bpm:110,dur:'4:01',date:'1 week ago',   color:'#c058ff',emoji:'<span data-echo-icon="sparkles"></span>',fav:false},
+  {id:'t4',name:'Desert Storm',   mood:'Rebellious',genre:'Rock',         bpm:140,dur:'2:33',date:'2 weeks ago',  color:'#e25c00',emoji:'<span data-echo-icon="flame"></span>',fav:false},
+  {id:'t5',name:'Cherry Bloom',   mood:'Calm',      genre:'Dream Pop',    bpm:95, dur:'3:45',date:'3 weeks ago',  color:'#ff9fb2',emoji:'<span data-echo-icon="flower"></span>',fav:true},
+  {id:'t6',name:'Late Night',     mood:'Melancholy',genre:'Ambient',      bpm:75, dur:'5:12',date:'1 month ago',  color:'#3d9eff',emoji:'<span data-echo-icon="moon"></span>',fav:false},
+];
 
 let tracks = [];
 let playingId = null;
 let activeFilter = 'all';
-let audioPlayer = null;
 
 /* ═══════════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════════ */
-(async function init(){
+(function init(){
   // auth guard
   if(!localStorage.getItem('echo_auth_token')){
     window.location.href='/login'; return;
@@ -28,25 +38,13 @@ let audioPlayer = null;
   document.getElementById('dd-name').textContent = name;
   document.getElementById('dd-email').textContent = email;
 
-  await loadTracks();
+  // load tracks
+  const stored = localStorage.getItem('echo_tracks');
+  tracks = stored ? JSON.parse(stored) : DEMO_TRACKS;
+  if(!stored) localStorage.setItem('echo_tracks', JSON.stringify(DEMO_TRACKS));
 
   renderView();
-  if(localStorage.getItem('echo_open_create') === '1'){
-    localStorage.removeItem('echo_open_create');
-    openCreateInspo();
-  }
 })();
-
-async function loadTracks(){
-  try {
-    const songs = await fetchSongs();
-    tracks = songs.map(songToTrack);
-    saveTracks();
-  } catch (error) {
-    tracks = JSON.parse(localStorage.getItem('echo_tracks') || '[]');
-    showToast(error instanceof Error ? error.message : 'Could not load library');
-  }
-}
 
 /* ═══════════════════════════════════════════════
    VIEW SWITCHING
@@ -248,6 +246,7 @@ function closeAllMenus(){
 function downloadTrack(id, fmt='mp3'){
   closeAllMenus();
   const t = tracks.find(t=>t.id===id);
+  if(t) showToast('Downloading '+t.name+'.'+fmt+'…');
   if(!t) return;
   if(t.downloadUrl || t.audioUrl){
     window.open(t.downloadUrl || t.audioUrl, '_blank');
@@ -409,7 +408,6 @@ const sel = {};   // selections store
 function openCreateInspo(){
   popupStep = 0;
   Object.keys(sel).forEach(k => delete sel[k]);
-  sel.generationMode = 'api';
   sel.bpm = 90;
   buildPopupDots();
   renderPopupStep(0, null);

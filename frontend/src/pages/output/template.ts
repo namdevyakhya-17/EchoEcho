@@ -28,6 +28,7 @@
     <div class="page-header">
       <div class="success-badge">✦ Generated</div>
       <h1 class="page-headline">Your tracks are ready</h1>
+      <p class="page-sub">4 unique variations based on your inspo</p>
       <p class="page-sub">Generated from your inspo</p>
       <div class="inspo-pills" id="inspo-pills">
         <!-- populated by JS -->
@@ -42,17 +43,20 @@
           <div class="card-cover" id="cover-0"
                style="background: linear-gradient(135deg, rgba(255,88,88,.13), rgba(255,88,88,.28))">
             <div class="waveform" id="wave-0"></div>
+            <div class="cover-dur" id="dur-0">3:12</div>
             <div class="cover-dur" id="dur-0">0:00</div>
             <div class="best-badge">Best Match ✦</div>
           </div>
 
           <div class="card-body">
+            <div class="card-name">Midnight Rain v1</div>
             <div class="card-name">Generated track</div>
             <div class="card-tags" id="tags-0"></div>
             <div class="card-dur-badge">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
               </svg>
+              <span id="dur-label-0">3:12</span>
               <span id="dur-label-0">0:00</span>
             </div>
           </div>
@@ -69,6 +73,7 @@
                      oninput="onRangeInput(0, this)"
                      style="background: var(--greyF4)"/>
             </div>
+            <div class="time-display" id="time-0">0:00 / 3:12</div>
             <div class="time-display" id="time-0">0:00 / 0:00</div>
           </div>
 
@@ -132,6 +137,11 @@
         <div class="card-cover" id="cover-1"
              style="background: linear-gradient(135deg, rgba(192,88,255,.13), rgba(192,88,255,.28))">
           <div class="waveform" id="wave-1"></div>
+          <div class="cover-dur" id="dur-1">2:47</div>
+        </div>
+
+        <div class="card-body">
+          <div class="card-name">Midnight Rain v2</div>
           <div class="cover-dur" id="dur-1">0:00</div>
         </div>
 
@@ -142,6 +152,7 @@
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
             </svg>
+            <span id="dur-label-1">2:47</span>
             <span id="dur-label-1">0:00</span>
           </div>
         </div>
@@ -158,6 +169,7 @@
                    oninput="onRangeInput(1, this)"
                    style="background: var(--greyF4)"/>
           </div>
+          <div class="time-display" id="time-1">0:00 / 2:47</div>
           <div class="time-display" id="time-1">0:00 / 0:00</div>
         </div>
 
@@ -191,6 +203,11 @@
         <div class="card-cover" id="cover-2"
              style="background: linear-gradient(135deg, rgba(61,158,255,.13), rgba(61,158,255,.28))">
           <div class="waveform" id="wave-2"></div>
+          <div class="cover-dur" id="dur-2">4:01</div>
+        </div>
+
+        <div class="card-body">
+          <div class="card-name">Midnight Rain v3</div>
           <div class="cover-dur" id="dur-2">0:00</div>
         </div>
 
@@ -201,6 +218,7 @@
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
             </svg>
+            <span id="dur-label-2">4:01</span>
             <span id="dur-label-2">0:00</span>
           </div>
         </div>
@@ -217,6 +235,7 @@
                    oninput="onRangeInput(2, this)"
                    style="background: var(--greyF4)"/>
           </div>
+          <div class="time-display" id="time-2">0:00 / 4:01</div>
           <div class="time-display" id="time-2">0:00 / 0:00</div>
         </div>
 
@@ -250,6 +269,11 @@
         <div class="card-cover" id="cover-3"
              style="background: linear-gradient(135deg, rgba(247,183,49,.13), rgba(247,183,49,.28))">
           <div class="waveform" id="wave-3"></div>
+          <div class="cover-dur" id="dur-3">2:33</div>
+        </div>
+
+        <div class="card-body">
+          <div class="card-name">Midnight Rain v4</div>
           <div class="cover-dur" id="dur-3">0:00</div>
         </div>
 
@@ -260,6 +284,7 @@
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
             </svg>
+            <span id="dur-label-3">2:33</span>
             <span id="dur-label-3">0:00</span>
           </div>
         </div>
@@ -276,6 +301,7 @@
                    oninput="onRangeInput(3, this)"
                    style="background: var(--greyF4)"/>
           </div>
+          <div class="time-display" id="time-3">0:00 / 2:33</div>
           <div class="time-display" id="time-3">0:00 / 0:00</div>
         </div>
 

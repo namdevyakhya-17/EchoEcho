@@ -164,6 +164,12 @@ startIconObserver();
     }, s.doneAt * 1000);
   });
 
+  /* ── Auto-navigate at 30s ───────────────────────────── */
+  const navTimer = setTimeout(() => {
+    clearInterval(headlineInterval);
+    clearInterval(timerInterval);
+    window.location.href = '/output';
+  }, 30000);
   const cleanup = () => {
     clearInterval(headlineInterval);
     clearInterval(timerInterval);
@@ -201,6 +207,10 @@ startIconObserver();
   document.querySelectorAll('a[href="/output"]').forEach(a => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
+      clearTimeout(navTimer);
+      clearInterval(headlineInterval);
+      clearInterval(timerInterval);
+      stepTimers.forEach(clearTimeout);
       cleanup();
       window.location.href = '/output';
     });

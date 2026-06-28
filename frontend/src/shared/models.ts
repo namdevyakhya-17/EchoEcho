@@ -1,3 +1,4 @@
+﻿export interface Inspiration {
 export interface Inspiration {
   generationMode: "api" | "musicgen";
   mood: string;
@@ -34,3 +35,4 @@ export interface AuthUser {
   name: string;
   email: string;
 }
+

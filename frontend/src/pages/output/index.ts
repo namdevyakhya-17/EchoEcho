@@ -9,6 +9,15 @@ startIconObserver();
    CONFIG
 ═══════════════════════════════════════════════ */
 const CARD_ACCENTS = ['#ff5858', '#c058ff', '#3d9eff', '#f7b731'];
+const CARD_VARIANTS = ['Default', 'Atmospheric', 'Upbeat', 'Raw'];
+const CARD_DURATIONS = ['3:12', '2:47', '4:01', '2:33'];
+const CARD_NAMES = ['Midnight Rain v1', 'Midnight Rain v2', 'Midnight Rain v3', 'Midnight Rain v4'];
+
+/* Playing state per card */
+const playState = [false, false, false, false];
+let playIntervals = [null, null, null, null];
+let heartState = [false, false, false, false];
+let selectedCard = 0; // default: Best Match
 const CARD_VARIANTS = ['Generated'];
 
 /* Playing state per card */
@@ -24,12 +33,15 @@ const fakeProgress = [0];
 /* ═══════════════════════════════════════════════
    AUTH GUARD
 ═══════════════════════════════════════════════ */
+(function init() {
 (async function init() {
   if (!localStorage.getItem('echo_auth_token')) {
     window.location.href = '/login';
     return;
   }
   const inspo = JSON.parse(localStorage.getItem('echo_pending_inspo') || '{}');
+  buildInspoPills(inspo);
+  buildAllTags(inspo);
   const generatedSong = JSON.parse(localStorage.getItem('echo_generated_song') || 'null');
   let songs = generatedSong ? [generatedSong] : [];
   if (songs.length === 0) {
@@ -68,6 +80,13 @@ function buildAllTags(inspo) {
   const bpm   = inspo.bpm   || 90;
   const subtitles = CARD_VARIANTS;
 
+  for (let i = 0; i < 4; i++) {
+    const container = document.getElementById('tags-' + i);
+    const accentBg = CARD_ACCENTS[i] + '22';
+    container.innerHTML = `
+      <span class="c-tag mood">${mood}</span>
+      <span class="c-tag genre">${genre}</span>
+      <span class="c-tag">${bpm} BPM</span>
   for (let i = 0; i < outputTracks.length; i++) {
     const container = document.getElementById('tags-' + i);
     if (!container) continue;
@@ -147,6 +166,7 @@ function buildWaveform(containerId, accent, barCount) {
 }
 
 function buildAllWaveforms() {
+  for (let i = 0; i < 4; i++) {
   for (let i = 0; i < Math.max(outputTracks.length, 1); i++) {
     buildWaveform('wave-' + i, CARD_ACCENTS[i], 50);
   }
@@ -155,10 +175,14 @@ function buildAllWaveforms() {
 /* ═══════════════════════════════════════════════
    PLAYBACK (FAKE)
 ═══════════════════════════════════════════════ */
+const durSeconds = [192, 167, 241, 153]; // 3:12, 2:47, 4:01, 2:33
+const fakeProgress = [0, 0, 0, 0];
+
 function togglePlay(idx) {
   const wasPlaying = playState[idx];
 
   // Stop all others
+  for (let i = 0; i < 4; i++) {
   for (let i = 0; i < playState.length; i++) {
     if (playState[i]) stopCard(i);
   }
@@ -211,6 +235,7 @@ function startCard(idx) {
     if (fakeProgress[idx] >= 100) stopCard(idx);
   }, 1000);
 
+  showToast('Playing: ' + CARD_NAMES[idx]);
   showToast('Playing: ' + (track?.name || 'Generated track'));
 }
 
@@ -236,6 +261,7 @@ function updateProgressUI(idx) {
 
   const elapsed = Math.round((pct / 100) * durSeconds[idx]);
   document.getElementById('time-' + idx).textContent =
+    formatTime(elapsed) + ' / ' + CARD_DURATIONS[idx];
     formatTime(elapsed) + ' / ' + formatDuration(durSeconds[idx]);
 }
 
@@ -245,6 +271,7 @@ function onRangeInput(idx, input) {
   updateRangeTrack(idx, pct, CARD_ACCENTS[idx]);
   const elapsed = Math.round((pct / 100) * durSeconds[idx]);
   document.getElementById('time-' + idx).textContent =
+    formatTime(elapsed) + ' / ' + CARD_DURATIONS[idx];
     formatTime(elapsed) + ' / ' + formatDuration(durSeconds[idx]);
 }
 
@@ -284,6 +311,7 @@ function toggleHeart(idx) {
    DOWNLOAD
 ═══════════════════════════════════════════════ */
 function downloadTrack(idx, fmt) {
+  showToast('Downloading ' + CARD_NAMES[idx] + '.' + fmt + '…');
   const track = outputTracks[idx];
   if (track?.downloadUrl || track?.audioUrl) {
     window.open(track.downloadUrl || track.audioUrl, '_blank');
@@ -338,6 +366,22 @@ function updateSheetButtons(idx) {
    SAVE TO LIBRARY
 ═══════════════════════════════════════════════ */
 function saveToLibrary(cardIdx) {
+  const tracks = JSON.parse(localStorage.getItem('echo_tracks') || '[]');
+  const inspo = JSON.parse(localStorage.getItem('echo_pending_inspo') || '{}');
+  const newTrack = {
+    id: 't' + Date.now(),
+    name: `${inspo.theme || 'New'} ${inspo.instrument || 'Track'} v${cardIdx + 1}`,
+    mood: inspo.mood || 'Custom',
+    genre: inspo.genre || 'Mixed',
+    bpm: inspo.bpm || 90,
+    dur: ['3:12', '2:47', '4:01', '2:33'][cardIdx],
+    date: 'Just now',
+    color: ['#ff5858', '#c058ff', '#3d9eff', '#f7b731'][cardIdx],
+    emoji: '<span data-echo-icon="music"></span>',
+    fav: false,
+  };
+  tracks.unshift(newTrack);
+  localStorage.setItem('echo_tracks', JSON.stringify(tracks));
   const track = outputTracks[cardIdx];
   if (track) localStorage.setItem('echo_tracks', JSON.stringify(outputTracks));
   window.location.href = '/dashboard';
@@ -374,6 +418,11 @@ function showToast(msg) {
       // Don't override button clicks
       if (e.target.closest('button') || e.target.closest('input')) return;
       selectedCard = idx;
+      showToast(CARD_NAMES[idx] + ' selected');
+    });
+  });
+})();
+
       showToast((outputTracks[idx]?.name || 'Generated track') + ' selected');
     });
   });
